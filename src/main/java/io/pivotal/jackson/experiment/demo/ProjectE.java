@@ -4,8 +4,8 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 public class ProjectE {
-    public String name;
-    public LocalDate startDate;
+    private String name;
+    private LocalDate startDate;
 
     public ProjectE(String name, LocalDate startDate) {
         this.name = name;
@@ -20,16 +20,8 @@ public class ProjectE {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-    
     public LocalDate getStartDate() {
         return startDate;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
     }
 
     @Override

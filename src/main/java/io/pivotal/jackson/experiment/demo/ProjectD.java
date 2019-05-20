@@ -4,8 +4,8 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 public class ProjectD {
-    public String name;
-    public LocalDate startDate;
+    private String name;
+    private LocalDate startDate;
 
     public ProjectD(String name, LocalDate startDate) {
         this.name = name;

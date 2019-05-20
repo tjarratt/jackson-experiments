@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.io.IOException;
 import java.time.LocalDate;
 
+import static junit.framework.TestCase.fail;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
@@ -44,7 +45,7 @@ public class DemoApplicationTests {
     public void deserialize_dto_with_getters_setters_all_public_works() throws IOException {
         ProjectC project = new ProjectC();
         project.setName("expected-project");
-        project.startDate = LocalDate.of(2019, 12, 1);
+        project.setStartDate(LocalDate.of(2019, 12, 1));
         ProjectC deserializedProject = getProjectFromJSON(ProjectC.class);
 
         assertThat(project).isEqualTo(deserializedProject);
@@ -52,18 +53,26 @@ public class DemoApplicationTests {
 
     @Test(expected = JsonMappingException.class)
     public void deserialize_dto_with_getters_constructor_should_fail() throws IOException {
-        ProjectD project = new ProjectD("expected-project", LocalDate.of(2019, 12, 1));
-        ProjectD deserializedProject = getProjectFromJSON(ProjectD.class);
+        getProjectFromJSON(ProjectD.class);
+        fail("should have raised an exception from the previous line");
+    }
+
+    @Test
+    public void deserialize_dto_with_getters_empty_constructor_works() throws IOException {
+        ProjectE project = new ProjectE("expected-project", LocalDate.of(2019, 12, 1));
+        ProjectE deserializedProject = getProjectFromJSON(ProjectE.class);
 
         assertThat(project).isEqualTo(deserializedProject);
     }
 
     @Test
-    public void deserialize_dto_with_getters_setters_constructor_works() throws IOException {
-        ProjectE project = new ProjectE("expected-project", LocalDate.of(2019, 12, 1));
-        ProjectE deserializedProject = getProjectFromJSON(ProjectE.class);
+    public void deserialize_dto_with_package_visible_fields_fails() throws IOException {
+        ProjectWithPackageVisibleFields project = new ProjectWithPackageVisibleFields();
+        project.name = "expected-project";
+        project.startDate = LocalDate.of(2019, 12, 1);
+        ProjectWithPackageVisibleFields deserializedProject = getProjectFromJSON(ProjectWithPackageVisibleFields.class);
 
-        assertThat(project).isEqualTo(deserializedProject);
+        assertThat(project).isNotEqualTo(deserializedProject);
     }
 
     private <T> T getProjectFromJSON(Class<T> clazz) throws IOException {
